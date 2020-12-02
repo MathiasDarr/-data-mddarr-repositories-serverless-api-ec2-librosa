@@ -24,9 +24,12 @@ def create_presigned_post(bucket_name, object_name, fields=None, conditions=None
     return response
 
 
+
+
+
 def lambda_handler(event, context):
 
-    presigned = create_presigned_post(BUCKET, 'user_upload.png')
+    presigned = create_presigned_post(BUCKET, 'profile_picture.png')
     response = {"status_code": 200, "body": json.dumps({
         "presigned": presigned
     }), 'headers': {

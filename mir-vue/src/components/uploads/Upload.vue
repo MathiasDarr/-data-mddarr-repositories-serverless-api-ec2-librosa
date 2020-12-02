@@ -67,10 +67,13 @@ export default {
                 formData.append('signature',signature)
                 formData.append('key',key)
                 
-                axios.put(presignedURL, formData, {
+                var parsed_presigned_url = presignedURL + key +''
+
+                console.log(parsed_presigned_url)
+                axios.put(parsed_presigned_url, formData, {
                   headers: {
+                    'Content-Type':'image/png',
                     'x-amz-algorithm':'AWS4-HMAC-SHA256',
-                    'Access-Control-Allow-Origin': '*'
 
                   }
                 });

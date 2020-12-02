@@ -28,7 +28,7 @@ def lambda_handler(event, context):
 
     presigned = create_presigned_post(BUCKET, 'user_upload.png')
     response = {"status_code": 200, "body": json.dumps({
-        "categories": presigned
+        "presigned": presigned
     }), 'headers': {
         "Access-Control-Allow-Origin": "*",
         "X-Requested-With": '*',

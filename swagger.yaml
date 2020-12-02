@@ -1,0 +1,51 @@
+swagger: "2.0"
+info:
+  description: "Serverless API"
+  version: "1.0.0"
+  title: "Librosa Transforms API"
+
+
+paths:
+  /signedURL:
+    post:
+      tags:
+        - "upload"
+      summary: "Upload a new file to S3"
+      description: ""
+      operationId: "uploadAudio"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+
+#      parameters:
+#        - name: "user"
+#          in: "path"
+#          description: "user email "
+#          required: true
+#          type: "string"
+
+      responses:
+        200:
+          description: "Success"
+        400:
+          description: "Bad Request"
+        401:
+          description: "Unauthorized"
+        500:
+          description: "Internal Server Error"
+      # For AWS Integration
+      x-amazon-apigateway-request-validators:
+        basic:
+          validateRequestParameters: true
+      x-amazon-apigateway-integration:
+        type: "aws"
+        httpMethod: "POST"
+        # Replace AWS_REGION and ACCOUNT_ID in uri
+        uri: "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:710339184759:function:UploadFunction/invocations"
+        responses:
+          default:
+            statusCode: 200
+        passthroughBehavior: "when_no_templates"
+#        requestTemplates:
+#          application/audio: "{ \r\n \"content\" : \"$input.body\" \r\n} "

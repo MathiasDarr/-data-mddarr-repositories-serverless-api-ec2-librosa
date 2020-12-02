@@ -1,0 +1,71 @@
+AWSTemplateFormatVersion : "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Dakobed Rest API Service
+
+
+Parameters:
+  TranscriptionsBucket:
+    Type: String
+    Default: dakobed-transcriptions-service
+
+Resources:
+
+  UploadApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: UploadApi
+      StageName: Prod
+      DefinitionUri: ./swagger.yaml
+
+
+  UploadFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Timeout: 10
+      FunctionName: UploadFunction
+      Policies:
+        - S3CrudPolicy:
+            BucketName: dakobed-presigned-user-upload-bucket
+        - SQSSendMessagePolicy:
+            QueueName: InitiateTransformsQueue
+        - AWSLambdaBasicExecutionRole
+        - DynamoDBCrudPolicy:
+            TableName: UserUploads
+      CodeUri: handlers/signedURL
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      Environment:
+        Variables:
+          UploadBucket: !Ref S3UploadBucket
+      Events:
+        UploadApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref UploadApi
+            Path: /signedURL
+            Method: POST
+
+  ConfigLambdaPermission:
+    Type: "AWS::Lambda::Permission"
+    DependsOn:
+    - UploadApi
+    - UploadFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref UploadFunction
+      Principal: apigateway.amazonaws.com
+
+  S3UploadBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: presigned-user-upload-bucket
+      CorsConfiguration:
+        CorsRules:
+        - AllowedHeaders:
+            - "*"
+          AllowedMethods:
+            - GET
+            - PUT
+            - HEAD
+          AllowedOrigins:
+            - "*"

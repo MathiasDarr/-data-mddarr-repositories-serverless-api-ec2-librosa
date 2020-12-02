@@ -48,44 +48,32 @@ export default {
                 var body = {fileName:'profile_picture.png'}
                 const response = await axios.post(url, body)
 
-                     
-
+    
                 // var policy = response.data.body.policy
       
                 var parsed_body = JSON.parse(response.data.body)
                 var parsed_presigned = parsed_body.presigned
-                console.log(parsed_body.presigned.fields)
+  
                 var presignedURL = parsed_presigned.url
-                console.log(presignedURL)
                 var signature = parsed_presigned.fields.signature
-                console.log(signature)
-                // var presignedURL = parsed_presigned.url
-                // var access_key = parsed_presigned.AWSAccessKeyId
-                // var key = parsed_presigned.key
-                // var policy = parsed_presigned.policy
-                // var signature = parsed_presigned.signature
+                var policy = parsed_presigned.fields.policy
+                var access_key = parsed_presigned.fields.AWSAccessKeyId
+                var key = parsed_presigned.fields.key
 
-                // // var key = parsed_body.key
-
-    
-                // console.log("key") 
-                // console.log(key)
-                // console.log("signature")          
-                // console.log(signature)     
-                // console.log(response.data.body)        
-                // const formData = new FormData();
-                // formData.append('file',file)
-                // formData.append('policy',policy)
-                // formData.append('AWSAccessKeyId',access_key)
-                // formData.append('signature',signature)
-                // formData.append('key',key)
+                const formData = new FormData();
+                formData.append('file',file)
+                formData.append('policy',policy)
+                formData.append('AWSAccessKeyId',access_key)
+                formData.append('signature',signature)
+                formData.append('key',key)
                 
+                axios.put(presignedURL, formData, {
+                  headers: {
+                    'x-amz-algorithm':'AWS4-HMAC-SHA256',
+                    'Access-Control-Allow-Origin': '*'
 
-                // axios.post(presignedURL, formData, {
-                //   headers: {
-                //     'Content-Type': 'multipart/form-data'
-                //   }
-                // });
+                  }
+                });
 
             }catch(err){
                 console.log(err)

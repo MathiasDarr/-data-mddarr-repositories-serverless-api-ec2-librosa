@@ -98,7 +98,7 @@ paths:
         basic:
           validateRequestParameters: true
       x-amazon-apigateway-integration:
-        type: "aws_proxy"
+        type: "aws"
         httpMethod: "POST"
         # Replace AWS_REGION and ACCOUNT_ID in uri
         uri: "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:710339184759:function:UploadFunction/invocations"

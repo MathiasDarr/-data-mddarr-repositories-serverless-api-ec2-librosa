@@ -43,13 +43,15 @@ export default {
         async fetch_presigned_url(){
             try{
                 // var url = window.__runtime_configuration.apiEndpoint + '/categories'
-                var url ='https://q2pyn2t2s9.execute-api.us-west-2.amazonaws.com/Prod/signedURL'
+                var url ='https://q2pyn2t2s9.execute-api.us-west-2.amazonaws.com/v1/signedURL'
                 // var headers = {
                 //     { headers: {'Access-Control-Allow-Origin':'*'}
                 // }
                 
                 var body = {fileName:'profile_picture.png'}
-                const response = await axios({url:url, method: 'post', data: body, headers:{'Access-Control-Allow-Origin':'*'}})
+                // const response = await axios({url:url, method: 'post', data: body, headers:{'Access-Control-Allow-Origin':'*'}})
+                const response = await axios.post(url,body)
+
                 console.log("no response")
                 console.log(response)                
 

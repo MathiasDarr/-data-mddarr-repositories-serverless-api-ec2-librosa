@@ -11,7 +11,7 @@ Resources:
     Properties:
       Name: UploadApi
       StageName: Prod
-      DefinitionUri: s3://dakobed-serverless-apis/9d39ced04f7d9bb16907effadb0af0eb
+      DefinitionUri: s3://dakobed-serverless-apis/52994c504a590790a98f13613dcc953f
   UploadFunction:
     Type: AWS::Serverless::Function
     Properties:

@@ -6,44 +6,105 @@ info:
 
 
 paths:
+#  /signedURL:
+#    post:
+#      tags:
+#        - "upload"
+#      summary: "Upload a new file to S3"
+#      description: ""
+#      operationId: "uploadAudio"
+#      consumes:
+#        - "application/json"
+#      produces:
+#        - "application/json"
+#
+##      parameters:
+##        - name: "user"
+##          in: "path"
+##          description: "user email "
+##          required: true
+##          type: "string"
+#
+#      responses:
+#        200:
+#          description: "Success"
+#        400:
+#          description: "Bad Request"
+#        401:
+#          description: "Unauthorized"
+#        500:
+#          description: "Internal Server Error"
+#      # For AWS Integration
+#      x-amazon-apigateway-request-validators:
+#        basic:
+#          validateRequestParameters: true
+#      x-amazon-apigateway-integration:
+#        type: "aws"
+#        httpMethod: "POST"
+#        # Replace AWS_REGION and ACCOUNT_ID in uri
+#        uri: "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:710339184759:function:UploadFunction/invocations"
+#        responses:
+#          default:
+#            statusCode: 200
+#        passthroughBehavior: "when_no_templates"
+
+
   /signedURL:
-    post:
-      tags:
-        - "upload"
-      summary: "Upload a new file to S3"
-      description: ""
-      operationId: "uploadAudio"
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
-
-#      parameters:
-#        - name: "user"
-#          in: "path"
-#          description: "user email "
-#          required: true
-#          type: "string"
-
+    options:
       responses:
         200:
           description: "Success"
-        400:
-          description: "Bad Request"
-        401:
-          description: "Unauthorized"
-        500:
-          description: "Internal Server Error"
+          headers:
+            Access-Control-Allow-Headers:
+              type: string
+            Access-Control-Allow-Methods:
+              type: string
+            Access-Control-Allow-Origin:
+              type: string
+          schema:
+            $ref: "#/definitions/Empty"
+      x-amazon-apigateway-integration:
+        contentHandling: CONVERT_TO_TEXT
+        type: "mock"
+        httpMethod: "POST"
+        requestTemplates:
+           "application/json": "{\"statusCode\": 200}"
+        responses:
+          default:
+            statusCode: 200
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'GET,POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+
+    post:
+      tags:
+        - "products"
+      summary: "return snotel data by location ID"
+      description: "Returns snotel data for a single location over range of dates specified by query params"
+      operationId: "getSnotelByLocation"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/Empty"
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
       # For AWS Integration
       x-amazon-apigateway-request-validators:
         basic:
           validateRequestParameters: true
       x-amazon-apigateway-integration:
-        type: "aws"
+        type: "aws_proxy"
         httpMethod: "POST"
         # Replace AWS_REGION and ACCOUNT_ID in uri
         uri: "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:710339184759:function:UploadFunction/invocations"
         responses:
           default:
             statusCode: 200
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
         passthroughBehavior: "when_no_templates"

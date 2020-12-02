@@ -4,8 +4,8 @@ from botocore.exceptions import ClientError
 import json
 import os
 
-BUCKET = os.getenv('UploadBucket')
 
+BUCKET = 'presigned-user-upload-bucket'
 
 def create_presigned_post(bucket_name, object_name, fields=None, conditions=None, expiration=3600):
     # Generate a presigned S3 POST URL
@@ -22,18 +22,5 @@ def create_presigned_post(bucket_name, object_name, fields=None, conditions=None
 
     # The response contains the presigned URL and required fields
     return response
-
-
-def lambda_handler(event, context):
-
-    presigned = create_presigned_post(BUCKET, 'user_upload.png')
-    response = {"status_code": 200, "body": json.dumps({
-        "categories": presigned
-    }), 'headers': {
-        "Access-Control-Allow-Origin": "*",
-        "X-Requested-With": '*',
-        "Access-Control-Allow-Headers": 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,x-requested-with',
-        "Access-Control-Allow-Methods": 'POST,GET,OPTIONS'
-    }}
-
-    return response
+fileName = 'profile_picture.png'
+presigned = create_presigned_post(BUCKET, fileName)

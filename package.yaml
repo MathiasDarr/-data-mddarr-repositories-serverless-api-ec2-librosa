@@ -11,7 +11,7 @@ Resources:
     Properties:
       Name: UploadApi
       StageName: Prod
-      DefinitionUri: s3://dakobed-serverless-apis/8a307373fd4060e68f3f45da4f8be1d8
+      DefinitionUri: s3://dakobed-serverless-apis/9d39ced04f7d9bb16907effadb0af0eb
   UploadFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -25,7 +25,7 @@ Resources:
       - AWSLambdaBasicExecutionRole
       - DynamoDBCrudPolicy:
           TableName: UserUploads
-      CodeUri: s3://dakobed-serverless-apis/8dbffdd7291f54ea89981cb07afb760c
+      CodeUri: s3://dakobed-serverless-apis/684a04084748e3d6bca3a3d61d32fbe6
       Handler: app.lambda_handler
       Runtime: python3.7
       Environment:

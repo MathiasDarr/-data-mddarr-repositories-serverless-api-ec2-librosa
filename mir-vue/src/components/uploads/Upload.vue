@@ -11,7 +11,7 @@
 
 <script>
 /* eslint-disable */
-
+import axios from 'axios';
 
 export default {
   props: ['files'],
@@ -40,31 +40,32 @@ export default {
       },
 
 
-      onFileChange(){
-        this.file = this.$refs.file.files[0];
-      if (this.file) {
-          this.$store.dispatch('upload/fetchSignatureAndPolicy', {
-            name: this.file.name,
-            type: this.file.type
-          }).then(() => {
-            let policy = this.$store.state.upload.policy
-            var formData = new FormData()
-            formData.append('key', policy.key)
-            formData.append('acl', policy.acl)
-            formData.append('Content-Type', this.file.type)
-            formData.append('success_action_status', policy.success_action_status)
-            formData.append('policy', policy.policy)
-            formData.append('x-amz-credential', policy['x-amz-credential'])
-            formData.append('x-amz-algorithm', policy['x-amz-algorithm'])
-            formData.append('x-amz-date', policy['x-amz-date'])
-            formData.append('x-amz-security-token', policy['x-amz-security-token'])
-            formData.append('x-amz-signature', policy['x-amz-signature'])
-            formData.append('file', this.file)
-            this.$store.dispatch('upload/upload', formData).then((data) => {
-            })
-          })
+        async fetch_presigned_url(){
+            try{
+                // var url = window.__runtime_configuration.apiEndpoint + '/categories'
+                var url ='https://q2pyn2t2s9.execute-api.us-west-2.amazonaws.com/Prod/signedURL'
+                // var headers = {
+                //     { headers: {'Access-Control-Allow-Origin':'*'}
+                // }
+                
+                var body = {fileName:'profile_picture.png'}
+                const response = await axios({url:url, method: 'post', data: body, headers:{'Access-Control-Allow-Origin':'*'}})
+                console.log("no response")
+                console.log(response)                
+
+            }catch(err){
+                console.log(err)
+            }
+        },
+
+        async upload_file(){
+            await this.fetch_presigned_url()
+        },
+
+        onFileChange(){
+
+            this.upload_file()
         }
-      }
    },
 }
 </script>

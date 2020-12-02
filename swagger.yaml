@@ -47,5 +47,3 @@ paths:
           default:
             statusCode: 200
         passthroughBehavior: "when_no_templates"
-#        requestTemplates:
-#          application/audio: "{ \r\n \"content\" : \"$input.body\" \r\n} "

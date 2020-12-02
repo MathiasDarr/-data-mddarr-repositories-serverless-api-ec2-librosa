@@ -25,9 +25,10 @@ def create_presigned_post(bucket_name, object_name, fields=None, conditions=None
 
 
 def lambda_handler(event, context):
-    presigned = create_presigned_post(BUCKET, 'user_upload.png')
+
+    # presigned = create_presigned_post(BUCKET, 'user_upload.png')
     response = {"statusCode": 200, "body": json.dumps({
-        "categories": presigned
+        "categories": event
     }), 'headers': {"Access-Control-Allow-Origin": "*"}}
 
     return response

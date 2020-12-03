@@ -4,6 +4,7 @@
       <label>File
         <input type="file" id="file" ref="file" v-on:change="onFileChange()"/>
       </label>
+     <v-btn small color="primary" v-on:click="submit()">Primary</v-btn>
     </div>
   </div>
 </template>
@@ -43,22 +44,22 @@ export default {
                 var key = parsed_presigned.fields.key
 
                 const formData = new FormData();
-                formData.append('file',file)
+                
                 formData.append('policy',policy)
                 formData.append('AWSAccessKeyId',access_key)
                 formData.append('signature',signature)
                 formData.append('key',key)
-                
-                var parsed_presigned_url = presignedURL + key +''
+                formData.append('file',file)
 
-                console.log(parsed_presigned_url)
-                axios.put(parsed_presigned_url, formData, {
-                  headers: {
-                    'Content-Type':'image/png',
-                    'x-amz-algorithm':'AWS4-HMAC-SHA256',
+          
 
-                  }
-                });
+                axios.put(presignedURL, formData)
+                // axios.put(parsed_presigned_url, formData, {
+                //   headers: {
+                //     'Content-Type':'image/png',
+              
+                //   }
+                // });
 
             }catch(err){
                 console.log(err)
@@ -70,13 +71,13 @@ export default {
         },
 
         submit(){
-          console.log(this.file)
+          this.upload_file()
         },
 
         onFileChange(){
-          this.file = this.$refs.file
+          this.file = this.$refs.file.files[0]
           console.log()
-          this.submit()
+          
         }
    },
 }

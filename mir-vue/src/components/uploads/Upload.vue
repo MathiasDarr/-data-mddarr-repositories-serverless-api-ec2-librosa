@@ -21,24 +21,6 @@ export default {
     }
   },
   methods: {
-      upload(){
-        var albumBucketName = "BUCKET_NAME";
-        var bucketRegion = "us-west-2";
-        var IdentityPoolId = "IDENTITY_POOL_ID";
-
-        AWS.config.update({
-            region: bucketRegion,
-                credentials: new AWS.CognitoIdentityCredentials({
-                IdentityPoolId: IdentityPoolId
-            })
-        });
-
-        var s3 = new AWS.S3({
-            apiVersion: "2006-03-01",
-            params: { Bucket: albumBucketName }
-        });
-      },
-
 
         async fetch_presigned_url(file){
             try{
@@ -87,8 +69,14 @@ export default {
             await this.fetch_presigned_url(file)
         },
 
+        submit(){
+          console.log(this.file)
+        },
+
         onFileChange(){
-            this.upload_file(file)
+          this.file = this.$refs.file
+          console.log()
+          this.submit()
         }
    },
 }

@@ -77,4 +77,4 @@ def test_upload_presigned_post():
     assert verify_object_exists(s3_client, BUCKET, key) == True
 
 
-test_upload_presigned_url()
+# test_upload_presigned_post()

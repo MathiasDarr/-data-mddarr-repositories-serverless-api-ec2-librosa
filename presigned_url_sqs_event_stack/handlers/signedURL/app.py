@@ -24,19 +24,15 @@ def create_presigned_post(bucket_name, object_name, fields=None, conditions=None
     return response
 
 
-
-
-
 def lambda_handler(event, context):
+    body = json.loads(event['body'])
+    user = body['userID']
+    filename = body['filename']
+    user = user.split('@')[0]
+    presigned = create_presigned_post(BUCKET, '{}/{}'.format(user, filename))
 
-    presigned = create_presigned_post(BUCKET, 'profile_picture.png')
-    response = {"status_code": 200, "body": json.dumps({
+    response = {"statusCode": 200, "body": json.dumps({
         "presigned": presigned
-    }), 'headers': {
-        "Access-Control-Allow-Origin": "*",
-        "X-Requested-With": '*',
-        "Access-Control-Allow-Headers": 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,x-requested-with',
-        "Access-Control-Allow-Methods": 'POST,GET,OPTIONS'
-    }}
-
+    }), 'headers': {"Access-Control-Allow-Origin": "*"}}
     return response
+

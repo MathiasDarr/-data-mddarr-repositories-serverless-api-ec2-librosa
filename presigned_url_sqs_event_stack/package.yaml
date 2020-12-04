@@ -14,12 +14,12 @@ Resources:
     Properties:
       Name: UploadApi
       StageName: Prod
-      DefinitionUri: s3://dakobed-serverless-apis/52994c504a590790a98f13613dcc953f
-  UploadFunction:
+      DefinitionUri: s3://dakobed-serverless-apis/d23c0ee73d059636deb99935e20fbe1c
+  PresignedPostUploadFunction:
     Type: AWS::Serverless::Function
     Properties:
       Timeout: 10
-      FunctionName: UploadFunction
+      FunctionName: PresignedPostUploadFunction
       Policies:
       - S3CrudPolicy:
           BucketName: dakobed-presigned-user-upload-bucket
@@ -28,7 +28,7 @@ Resources:
       - AWSLambdaBasicExecutionRole
       - DynamoDBCrudPolicy:
           TableName: UserUploads
-      CodeUri: s3://dakobed-serverless-apis/02d0d52f3e998c44354d66c28837c225
+      CodeUri: s3://dakobed-serverless-apis/93ff0e7e9329abf9848e4642443c55a0
       Handler: app.lambda_handler
       Runtime: python3.7
       Environment:
@@ -47,11 +47,11 @@ Resources:
     Type: AWS::Lambda::Permission
     DependsOn:
     - UploadApi
-    - UploadFunction
+    - PresignedPostUploadFunction
     Properties:
       Action: lambda:InvokeFunction
       FunctionName:
-        Ref: UploadFunction
+        Ref: PresignedPostUploadFunction
       Principal: apigateway.amazonaws.com
   S3UploadBucket:
     Type: AWS::S3::Bucket

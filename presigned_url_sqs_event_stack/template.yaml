@@ -18,11 +18,11 @@ Resources:
       StageName: Prod
       DefinitionUri: ./swagger.yaml
 
-  UploadFunction:
+  PresignedPostUploadFunction:
     Type: AWS::Serverless::Function
     Properties:
       Timeout: 10
-      FunctionName: UploadFunction
+      FunctionName: PresignedPostUploadFunction
       Policies:
         - S3CrudPolicy:
             BucketName: dakobed-presigned-user-upload-bucket
@@ -49,10 +49,10 @@ Resources:
     Type: "AWS::Lambda::Permission"
     DependsOn:
     - UploadApi
-    - UploadFunction
+    - PresignedPostUploadFunction
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !Ref UploadFunction
+      FunctionName: !Ref PresignedPostUploadFunction
       Principal: apigateway.amazonaws.com
 
   S3UploadBucket:

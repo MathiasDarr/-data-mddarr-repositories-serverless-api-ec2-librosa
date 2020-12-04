@@ -23,11 +23,12 @@ def create_presigned_post(bucket_name, object_name, fields=None, conditions=None
 
     # The response contains the presigned URL and required fields
     return response
-fileName = 'profile_picture.png'
+fileName = 'small.jpg'
 response = create_presigned_post(BUCKET, fileName)
 
-# fields = presigned['fields']
-# access_key = fields['AWSAccessKeyId']
+fields = response['fields']
+access_key = fields['AWSAccessKeyId']
+print(access_key)
 # signature = fields['signature']
 # key = fields['key']
 # url = presigned['url']
@@ -36,6 +37,9 @@ response = create_presigned_post(BUCKET, fileName)
 # print(parsed_presigned_url)
 
 
+
 with open(fileName, 'rb') as f:
     files = {'file': (fileName, f)}
     http_response = requests.post(response['url'], data=response['fields'], files=files)
+
+req = http_response.request

@@ -2,21 +2,21 @@ AWSTemplateFormatVersion : "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: Dakobed Rest API Service
 
-
 Parameters:
-  TranscriptionsBucket:
+  QueueName:
     Type: String
-    Default: dakobed-transcriptions-service
+    Default: LibrosaTransformsQueue
+  BucketName:
+    Type: String
+    Default: dakobed-sqs-transform-bucket
 
 Resources:
-
   UploadApi:
     Type: AWS::Serverless::Api
     Properties:
       Name: UploadApi
       StageName: Prod
       DefinitionUri: ./swagger.yaml
-
 
   UploadFunction:
     Type: AWS::Serverless::Function
@@ -58,7 +58,11 @@ Resources:
   S3UploadBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: presigned-user-upload-bucket
+      BucketName: !Ref BucketName
+      NotificationConfiguration:
+        QueueConfigurations:
+          - Event: s3:ObjectCreated:Put
+            Queue: !GetAtt TransformQueue.Arn
       CorsConfiguration:
         CorsRules:
         - AllowedHeaders:
@@ -67,5 +71,29 @@ Resources:
             - GET
             - PUT
             - HEAD
+            - POST
           AllowedOrigins:
             - "*"
+
+  TransformQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Ref QueueName
+
+  SQSQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    DependsOn: TransformQueue
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: "*"
+            Action: SQS:SendMessage
+            Resource: "*"
+            Condition:
+              ArnLike:
+                aws:SourceArn: !Sub 'arn:aws:s3:::${BucketName}'
+      Queues:
+        - !Ref TransformQueue

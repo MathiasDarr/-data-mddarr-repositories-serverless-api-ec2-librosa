@@ -43,23 +43,76 @@ export default {
                 var access_key = parsed_presigned.fields.AWSAccessKeyId
                 var key = parsed_presigned.fields.key
 
-                const formData = new FormData();
+
+                var body = {
+                  signature:signature,
+                  policy: policy,
+                  AWSAccessKeyId: access_key,
+                  key: key
+                }
+                // const formData = new FormData();
                 
-                formData.append('policy',policy)
-                formData.append('AWSAccessKeyId',access_key)
-                formData.append('signature',signature)
-                formData.append('key',key)
-                formData.append('file',file)
 
-          
 
-                axios.put(presignedURL, formData)
-                // axios.put(parsed_presigned_url, formData, {
-                //   headers: {
-                //     'Content-Type':'image/png',
-              
-                //   }
-                // });
+                // formData.append('key',key)
+                // formData.append('AWSAccessKeyId','AKIA2KY4DZB3S7AQRRVH')
+                // formData.append('policy',policy)
+
+                // formData.append('signature',signature)
+    
+                // formData.append('file',this.file)
+                // const reader = new FileReader()
+
+                // const xhr = new XMLHttpRequest();
+                // xhr.open("OPTIONS", presignedURL)
+                // xhr.open("PUT", presignedURL, true);
+                
+                // xhr.send(formData);
+                
+                // xhr.onload = function() {
+                //   this.status === 204 ? resolve() : reject(this.responseText);
+                // };
+                
+                // var body = {
+                //   key:key,
+                //   policy: policy,
+                //   signature: signature,
+                //   AWSAccessKeyId: access_key,
+                //   file: file
+                // }
+
+              //   fetch(presignedURL,{method:'OPTIONS'})
+              //   fetch(presignedURL, {
+              //     method: 'POST',
+              //     body: formData
+              //   })
+
+              //     const config = {
+              //   method: "POST",
+              //   headers: new Headers({
+              //       "Accept": "application/xml"
+              //     }),
+              //   body: formData,
+              // };
+
+              // return fetch(url, config)
+              //   .then(response => response.text())
+              //   .then((xml) => {
+              //     // decode xml and handle response
+              //   })
+              //   .catch((e) => console.error.bind(console))
+
+
+                // axios.put(presignedURL, formData)
+
+
+                
+
+                // axios.put(presignedURL, formData).then(response => {
+                //   console.log('response', response)
+                // }).catch(error => {
+                //   console.log('error', error)
+                // })
 
             }catch(err){
                 console.log(err)
@@ -71,12 +124,13 @@ export default {
         },
 
         submit(){
+          
           this.upload_file()
         },
 
         onFileChange(){
           this.file = this.$refs.file.files[0]
-          console.log()
+          
           
         }
    },

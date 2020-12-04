@@ -12,7 +12,6 @@ import requests
 def create_presigned_post(bucket_name, object_name, fields=None, conditions=None, expiration=3600):
     # Generate a presigned S3 POST URL
     s3_client = boto3.client('s3')
-    s3_resource = boto3.resource('s3')
     try:
         response = s3_client.generate_presigned_post(bucket_name,
                                                      object_name,
@@ -75,6 +74,9 @@ def test_upload_presigned_post():
     assert http_response.status_code == 204
 
     assert verify_object_exists(s3_client, BUCKET, key) == True
+
+
+
 
 
 # test_upload_presigned_post()

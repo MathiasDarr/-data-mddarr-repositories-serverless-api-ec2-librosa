@@ -28,7 +28,7 @@ Resources:
       - AWSLambdaBasicExecutionRole
       - DynamoDBCrudPolicy:
           TableName: UserUploads
-      CodeUri: s3://dakobed-serverless-apis/a6a4032a60f4d2e9b52b467855cb68a4
+      CodeUri: s3://dakobed-serverless-apis/cc8f1bdfebc22edda4f907ad228e9383
       Handler: app.lambda_handler
       Runtime: python3.7
       Environment:

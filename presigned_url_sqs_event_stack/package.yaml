@@ -14,7 +14,7 @@ Resources:
     Properties:
       Name: UploadApi
       StageName: Prod
-      DefinitionUri: s3://dakobed-serverless-apis/d23c0ee73d059636deb99935e20fbe1c
+      DefinitionUri: s3://dakobed-serverless-apis/d303d9ef95d6419af485613526063d0c
   PresignedPostUploadFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -28,7 +28,7 @@ Resources:
       - AWSLambdaBasicExecutionRole
       - DynamoDBCrudPolicy:
           TableName: UserUploads
-      CodeUri: s3://dakobed-serverless-apis/93ff0e7e9329abf9848e4642443c55a0
+      CodeUri: s3://dakobed-serverless-apis/a6a4032a60f4d2e9b52b467855cb68a4
       Handler: app.lambda_handler
       Runtime: python3.7
       Environment:
@@ -60,7 +60,7 @@ Resources:
         Ref: BucketName
       NotificationConfiguration:
         QueueConfigurations:
-        - Event: s3:ObjectCreated:Put
+        - Event: s3:ObjectCreated:Post
           Queue:
             Fn::GetAtt:
             - TransformQueue

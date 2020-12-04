@@ -61,7 +61,7 @@ Resources:
       BucketName: !Ref BucketName
       NotificationConfiguration:
         QueueConfigurations:
-          - Event: s3:ObjectCreated:Put
+          - Event: s3:ObjectCreated:Post
             Queue: !GetAtt TransformQueue.Arn
       CorsConfiguration:
         CorsRules:

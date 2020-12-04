@@ -6,8 +6,6 @@ import pytest
 import logging
 import boto3
 from botocore.exceptions import ClientError
-import json
-import os
 import requests
 
 
@@ -29,22 +27,54 @@ def create_presigned_post(bucket_name, object_name, fields=None, conditions=None
     return response
 
 
-def upload_file_with_presigned_url():
+def upload_file_with_presigned_url(filename, key, bucket):
     """
     This function uses the presigned url returned and uploads to s3.
     :return: requests.response
     """
-    fileName = 'jazz3_solo.wav'
-    filePath = '{}/{}'.format('dakobedbard', fileName)
-    BUCKET = 'dakobed-sqs-transform-bucket'
-    response = create_presigned_post(BUCKET, filePath)
 
-    with open(fileName, 'rb') as f:
-        files = {'file': (filePath, f)}
+    response = create_presigned_post(bucket, key)
+
+    with open(filename, 'rb') as f:
+        files = {'file': (key, f)}
         http_response = requests.post(response['url'], data=response['fields'], files=files)
     return http_response
 
 
-def test_upload_presigned_url():
-    http_response = upload_file_with_presigned_url()
+def verify_object_exists(client, bucket, key):
+    """
+
+    :param client: boto3 s3 client
+    :param bucket: s3 bucket
+    :param key:
+    :return: boolean, true if the object 'key' is found in the bucket false other wise
+    """
+    found = False
+    try:
+        client.head_object(Bucket=bucket, Key=key)
+        found = True
+    except ClientError:
+        pass
+    return found
+
+
+def test_upload_presigned_post():
+    fileName = 'jazz3_solo.wav'
+    user = 'dakobedbard'
+    BUCKET = 'dakobed-sqs-transform-bucket'
+
+    key = '{}/{}'.format(user, fileName)
+
+    s3 = boto3.resource('s3')
+    s3.Object(BUCKET, key).delete()
+
+    s3_client = boto3.client('s3')
+    assert verify_object_exists(s3_client, BUCKET, key) == False
+
+    http_response = upload_file_with_presigned_url(fileName, key, BUCKET)
     assert http_response.status_code == 204
+
+    assert verify_object_exists(s3_client, BUCKET, key) == True
+
+
+test_upload_presigned_url()

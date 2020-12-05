@@ -25,7 +25,7 @@ Resources:
       FunctionName: PresignedPostUploadFunction
       Policies:
         - S3CrudPolicy:
-            BucketName: dakobed-presigned-user-upload-bucket
+            BucketName: !Ref BucketName
         - SQSSendMessagePolicy:
             QueueName: InitiateTransformsQueue
         - AWSLambdaBasicExecutionRole
@@ -36,7 +36,7 @@ Resources:
       Runtime: python3.7
       Environment:
         Variables:
-          UploadBucket: !Ref S3UploadBucket
+          UploadBucket: !Ref BucketName
       Events:
         UploadApi:
           Type: Api

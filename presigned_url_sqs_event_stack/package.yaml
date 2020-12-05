@@ -22,7 +22,8 @@ Resources:
       FunctionName: PresignedPostUploadFunction
       Policies:
       - S3CrudPolicy:
-          BucketName: dakobed-presigned-user-upload-bucket
+          BucketName:
+            Ref: BucketName
       - SQSSendMessagePolicy:
           QueueName: InitiateTransformsQueue
       - AWSLambdaBasicExecutionRole
@@ -34,7 +35,7 @@ Resources:
       Environment:
         Variables:
           UploadBucket:
-            Ref: S3UploadBucket
+            Ref: BucketName
       Events:
         UploadApi:
           Type: Api

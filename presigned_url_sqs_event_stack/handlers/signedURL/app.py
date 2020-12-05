@@ -30,7 +30,7 @@ def lambda_handler(event, context):
     filename = body['filename']
     user = user.split('@')[0]
     presigned = create_presigned_post(BUCKET, '{}/{}'.format(user, filename))
-
+    presigned['fields']['bucket'] = BUCKET
     response = {"statusCode": 200, "body": json.dumps({
         "presigned": presigned
     }), 'headers': {"Access-Control-Allow-Origin": "*"}}

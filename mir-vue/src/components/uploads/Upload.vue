@@ -26,30 +26,36 @@ export default {
         async fetch_presigned_url(file){
             try{
                 // var url = window.__runtime_configuration.apiEndpoint + '/categories'
-                var url ='https://q2pyn2t2s9.execute-api.us-west-2.amazonaws.com/v1/signedURL'
+
+                var name = this.file.name
+                console.log(name)
+                var url ='https://cr5nlv4c58.execute-api.us-west-2.amazonaws.com/Prod/signedURL'
                 
-                var body = {fileName:'profile_picture.png'}
+                var body = {userID:'dakobedbard@gmail.com', filename:name}
                 const response = await axios.post(url, body)
 
-    
+                
+                console.log(response.data.presigned)
                 // var policy = response.data.body.policy
-      
-                var parsed_body = JSON.parse(response.data.body)
-                var parsed_presigned = parsed_body.presigned
+
+                // var parsed_body = JSON.parse(response.data.body)
+                // var parsed_presigned = parsed_body.presigned
   
-                var presignedURL = parsed_presigned.url
-                var signature = parsed_presigned.fields.signature
-                var policy = parsed_presigned.fields.policy
-                var access_key = parsed_presigned.fields.AWSAccessKeyId
-                var key = parsed_presigned.fields.key
+                // console.log(parsed_presigned)
+
+                // var presignedURL = parsed_presigned.url
+                // var signature = parsed_presigned.fields.signature
+                // var policy = parsed_presigned.fields.policy
+                // var access_key = parsed_presigned.fields.AWSAccessKeyId
+                // var key = parsed_presigned.fields.key
 
 
-                var body = {
-                  signature:signature,
-                  policy: policy,
-                  AWSAccessKeyId: access_key,
-                  key: key
-                }
+                // var body = {
+                //   signature:signature,
+                //   policy: policy,
+                //   AWSAccessKeyId: access_key,
+                //   key: key
+                // }
                 // const formData = new FormData();
                 
 

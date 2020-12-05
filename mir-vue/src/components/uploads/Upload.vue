@@ -33,12 +33,12 @@ export default {
                 
                 var body = {userID:'dakobedbard@gmail.com', filename:name}
                 const response = await axios.post(url, body)
-
+                var data = response.data.presigned 
                 
-                console.log(response.data.presigned)
-                // var policy = response.data.body.policy
-
-                // var parsed_body = JSON.parse(response.data.body)
+                let form = new FormData()
+                Object.keys(data.fields).forEach(key=>form.append(key, data.fields[key]))
+                form.append('file', this.file)
+                await fetch(data.url, {method:'POST', body: form})
                 // var parsed_presigned = parsed_body.presigned
   
                 // console.log(parsed_presigned)

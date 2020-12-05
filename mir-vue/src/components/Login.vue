@@ -75,7 +75,7 @@ export default {
                 var tokens = {access:access_token, id:id_token, refresh: refreshToken}
                 this.setJWT(tokens)
                 this.setEmail(this.email)
-                this.$router.push({name:'orders'})
+                this.$router.push({name:'upload'})
                 // this.$router.push({name:'storefront'})
             }
         });

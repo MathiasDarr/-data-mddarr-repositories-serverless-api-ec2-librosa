@@ -63,7 +63,6 @@ const actions = {
         var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
         cognitoUser.authenticateUser(authenticationDetails, {
             onSuccess: function (result) {
-                console.log("ID TOKEN " +result.getIdToken().getJwtToken())
                 commit('setAccessToken', {access:result.getAccessToken().getJwtToken(),id: result.getIdToken().getJwtToken()})
             },
 

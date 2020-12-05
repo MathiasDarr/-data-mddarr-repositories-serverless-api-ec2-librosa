@@ -25,6 +25,12 @@ export default {
       file: ''
     }
   },
+
+  computed: {
+    ...mapGetters(["getEmail", "getIdToken"]),
+  },
+
+
   methods: {
 
         async post_presigned_url(data){
@@ -42,8 +48,14 @@ export default {
                 
                 var body = {userID:this.getEmail, filename:name}
                 
-                const response = await axios.post(url, body)
-                var data = response.data.presigned 
+                // const response = await axios.post(url, body)
+                // var data = response.data.presigned 
+                
+                const data = await axios.post(url) //, {
+                // headers: {
+                //         Authorization: this.getIdToken
+                //     }
+                // })
                 
                 let form = new FormData()
                 Object.keys(data.fields).forEach(key=>form.append(key, data.fields[key]))
@@ -64,9 +76,6 @@ export default {
             await this.fetch_presigned_url(file)
         },
 
-          computed: {
-          ...mapGetters(["getEmail", "getIdToken"]),
-        },
 
 
         submit(){

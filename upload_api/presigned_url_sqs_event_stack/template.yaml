@@ -32,6 +32,39 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName: UserUploads
       CodeUri: handlers/signedURL
+
+      Layers:
+        - !ImportValue upload-authorization-layer-stack:AuthorizationLayer
+
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      Environment:
+        Variables:
+          userpool_id: !ImportValue upload-userpool-stack:UserPool
+          app_client_id: !ImportValue upload-userpool-stack:UserPoolClient
+          UploadBucket: !Ref BucketName
+      Events:
+        UploadApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref UploadApi
+            Path: /signedURL
+            Method: POST
+
+  InsertUploadDynamoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Timeout: 10
+      FunctionName: InsertUploadDynamoFunction
+      Policies:
+#        - S3CrudPolicy:
+#            BucketName: !Ref BucketName
+#        - SQSSendMessagePolicy:
+#            QueueName: InitiateTransformsQueue
+#        - AWSLambdaBasicExecutionRole
+        - DynamoDBCrudPolicy:
+            TableName: UserUploads
+      CodeUri: handlers/dynamo_upload
       Handler: app.lambda_handler
       Runtime: python3.7
       Environment:
@@ -42,7 +75,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref UploadApi
-            Path: /signedURL
+            Path: /upload
             Method: POST
 
   ConfigLambdaPermission:

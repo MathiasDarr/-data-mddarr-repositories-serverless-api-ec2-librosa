@@ -12,6 +12,7 @@ const state = {
     errorLoadingState:false,
     access_token: false,
     idToken: false,
+    refresh_token: false,
     email: false
 
 };
@@ -20,7 +21,8 @@ const getters = {
     getJwtAccessToken: state => state.access_token,
     getLoggedIn: state => state.loggedIn,
     getIdToken: state => state.idToken,
-    getEmail: state => state.email
+    getEmail: state => state.email,
+    get_refresh_token: state => state.refresh_token
 
 };
 
@@ -41,9 +43,10 @@ const actions = {
     async authentication({commit}, email, password){
         
         var poolData = {
-            UserPoolId : 'us-west-2_rrVhZsufQ',
-            ClientId : '633b35gtorn2odi25dotujndob'
+            UserPoolId : 'us-west-2_Ogg33Y77t',
+            ClientId : '4afcdr4p79tnr6th9fcsg9bnmj'
             };
+            
         var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
         var userData = {
@@ -99,8 +102,9 @@ const mutations = {
     setCognitoInfo:(state, newValue) => (state.cognitoInfo= newValue),
     setAccessToken:(state, tokens) => {//token, idToken) => {
         state.loggedIn = true;
-        state.access_token = tokens.acces;
+        state.access_token = tokens.access;
         state.idToken = tokens.id
+        state.refresh_token = tokens.refresh
     }
 };
 
